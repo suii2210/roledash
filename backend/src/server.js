@@ -29,7 +29,7 @@ const corsOptions = {
       allowedOrigins.includes("*") ||
       allowedOrigins.includes(requestOrigin)
     ) {
-      callback(null, true);
+      callback(null, requestOrigin || true);
     } else {
       callback(null, false);
     }
@@ -40,8 +40,9 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
-app.use(cors(corsOptions));
-app.options(/.*/, cors(corsOptions));
+const corsMiddleware = cors(corsOptions);
+app.use(corsMiddleware);
+app.options(/.*/, corsMiddleware);
 app.use(express.json());
 
 app.get("/", (_req, res) => {
