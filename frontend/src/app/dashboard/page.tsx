@@ -18,7 +18,7 @@ import {
   LuBell,
   LuUsers,
   LuLayoutDashboard,
-  LuBarChart3,
+  LuChartBar,
 } from "react-icons/lu";
 
 const content = {
@@ -26,7 +26,7 @@ const content = {
     heading: "Track your personal updates",
     metrics: [
       { label: "Completion", value: 68, icon: LuShieldCheck },
-      { label: "Feedback score", value: 82, icon: LuBarChart3 },
+      { label: "Feedback score", value: 82, icon: LuChartBar },
     ],
   },
   ADMIN: {
