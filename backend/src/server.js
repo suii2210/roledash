@@ -11,9 +11,18 @@ if (!process.env.JWT_SECRET) {
   throw new Error("JWT_SECRET is not set");
 }
 
+const rawOrigins = process.env.CLIENT_URL || "*";
+const allowedOrigins = rawOrigins
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || "*",
+    origin:
+      allowedOrigins.includes("*") || allowedOrigins.length === 0
+        ? "*"
+        : allowedOrigins,
   })
 );
 app.use(express.json());
