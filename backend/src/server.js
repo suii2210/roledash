@@ -12,17 +12,22 @@ if (!process.env.JWT_SECRET) {
 }
 
 const rawOrigins = process.env.CLIENT_URL || "*";
+const normalizeOrigin = (value) =>
+  value === "*" ? "*" : value.replace(/\/$/, "").trim();
+
 const allowedOrigins = rawOrigins
   .split(",")
   .map((origin) => origin.trim())
-  .filter(Boolean);
+  .filter(Boolean)
+  .map(normalizeOrigin);
 
 const corsOptions = {
   origin: (origin, callback) => {
+    const requestOrigin = origin ? normalizeOrigin(origin) : null;
     if (
-      !origin ||
+      !requestOrigin ||
       allowedOrigins.includes("*") ||
-      allowedOrigins.includes(origin)
+      allowedOrigins.includes(requestOrigin)
     ) {
       callback(null, true);
     } else {
@@ -36,7 +41,7 @@ const corsOptions = {
 };
 
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+app.options(/.*/, cors(corsOptions));
 app.use(express.json());
 
 app.get("/", (_req, res) => {
